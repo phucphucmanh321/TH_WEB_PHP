@@ -36,3 +36,27 @@ foreach($b as $k=>$v)
 	}
 	?>
 </table>
+
+
+<hr class="cauA" />
+Số phần tử có giá trị dương trong mảng $a là:
+<?php
+	$count =0;
+	foreach($a as $value){
+		if($value>0)
+			$count++;
+	}
+	echo $count;
+?>
+
+
+<hr class="cauB" />
+<?php
+	$c;
+	foreach($b as $key => $value){
+		if($value<0)
+			$c[$key]=$value*-1;
+		else $c[$key]=$value;
+	}
+	print_r($c);
+?>
