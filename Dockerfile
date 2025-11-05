@@ -1,13 +1,13 @@
 # Bước 1: Build project
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM php:8.1-cli AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app
+RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev && docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
+RUN composer install --no-dev --optimize-autoloader
 
 # Bước 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
-WORKDIR /app
-COPY --from=build /app .
-EXPOSE 8080
-ENTRYPOINT ["dotnet", "QuanLyBanHang_Admin.dll"]
+FROM php:8.1-apache AS runtime
+WORKDIR /var/www/html
+COPY --from=build /src /var/www/html
+EXPOSE 80
+CMD ["apache2-foreground"]
